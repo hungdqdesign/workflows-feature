@@ -5,14 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "node src/index.js",
-    "db:migrate": "node --experimental-vm-modules node_modules/drizzle-kit/cli.js migrate",
-    "db:generate": "node --experimental-vm-modules node_modules/drizzle-kit/cli.js generate"
+    "db:migrate": "psql $DATABASE_URL < db/migrations/0001_initial_workflows.sql"
   },
   "dependencies": {
-    "drizzle-orm": "^0.30.0",
+    "express": "^4.18.0",
     "postgres": "^3.4.0"
-  },
-  "devDependencies": {
-    "drizzle-kit": "^0.21.0"
   }
 }
