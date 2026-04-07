@@ -17,7 +17,7 @@ export function WorkflowDetail({ workflowId, companyId, onBack }) {
   async function loadWorkflow() {
     try {
       setLoading(true);
-      const data = await workflowsApi.get(workflowId);
+      const data = await workflowsApi.get(companyId, workflowId);
       setWorkflow(data);
       setError(null);
     } catch (err) {
@@ -39,7 +39,7 @@ export function WorkflowDetail({ workflowId, companyId, onBack }) {
     try {
       const updatedSteps = [...workflow.steps, { ...newStep, id: `temp-${Date.now()}` }];
       setWorkflow({ ...workflow, steps: updatedSteps });
-      await workflowsApi.updateSteps(workflowId, [...workflow.steps, newStep]);
+      await workflowsApi.updateSteps(companyId, workflowId, [...workflow.steps, newStep]);
       setSelectedTaskId('');
       setShowTaskDialog(false);
     } catch (err) {
@@ -55,6 +55,7 @@ export function WorkflowDetail({ workflowId, companyId, onBack }) {
     try {
       setWorkflow({ ...workflow, steps: reorderedSteps });
       await workflowsApi.updateSteps(
+        companyId,
         workflowId,
         reorderedSteps.map((s) => ({ issueId: s.issueId, stepOrder: s.stepOrder }))
       );
@@ -83,9 +84,12 @@ export function WorkflowDetail({ workflowId, companyId, onBack }) {
   }
 
   async function handleDragEnd() {
+    if (draggedIndex === null) return;
     setDraggedIndex(null);
     try {
+      // Use the latest workflow state (already updated by dragover)
       await workflowsApi.updateSteps(
+        companyId,
         workflowId,
         workflow.steps.map((s) => ({ issueId: s.issueId, stepOrder: s.stepOrder }))
       );

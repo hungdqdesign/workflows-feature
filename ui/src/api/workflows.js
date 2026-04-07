@@ -21,7 +21,7 @@ export const workflowsApi = {
     return request(`/companies/${companyId}/workflows`);
   },
 
-  get(workflowId) {
+  get(companyId, workflowId) {
     return request(`/companies/${companyId}/workflows/${workflowId}`);
   },
 
@@ -32,20 +32,20 @@ export const workflowsApi = {
     });
   },
 
-  update(workflowId, data) {
+  update(companyId, workflowId, data) {
     return request(`/companies/${companyId}/workflows/${workflowId}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
     });
   },
 
-  remove(workflowId) {
+  remove(companyId, workflowId) {
     return request(`/companies/${companyId}/workflows/${workflowId}`, {
       method: 'DELETE',
     });
   },
 
-  updateSteps(workflowId, steps) {
+  updateSteps(companyId, workflowId, steps) {
     return request(`/companies/${companyId}/workflows/${workflowId}/steps`, {
       method: 'PUT',
       body: JSON.stringify({ steps }),

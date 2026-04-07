@@ -41,7 +41,7 @@ export function Workflows({ companyId, onSelectWorkflow }) {
   async function handleUpdate(e) {
     e.preventDefault();
     try {
-      await workflowsApi.update(editingWorkflow.id, formData);
+      await workflowsApi.update(companyId, editingWorkflow.id, formData);
       setFormData({ name: '', description: '' });
       setEditingWorkflow(null);
       setShowDialog(false);
@@ -54,7 +54,7 @@ export function Workflows({ companyId, onSelectWorkflow }) {
   async function handleDelete(workflow) {
     if (!confirm(`Delete workflow "${workflow.name}"?`)) return;
     try {
-      await workflowsApi.remove(workflow.id);
+      await workflowsApi.remove(companyId, workflow.id);
       loadWorkflows();
     } catch (err) {
       alert(err.message);
