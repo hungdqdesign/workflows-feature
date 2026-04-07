@@ -2,8 +2,17 @@
   "name": "@workflows/server",
   "version": "1.0.0",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "dev": "node src/index.js",
-    "db:migrate": "echo 'migrate'"
+    "db:migrate": "node --experimental-vm-modules node_modules/drizzle-kit/cli.js migrate",
+    "db:generate": "node --experimental-vm-modules node_modules/drizzle-kit/cli.js generate"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.30.0",
+    "postgres": "^3.4.0"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.21.0"
   }
 }
