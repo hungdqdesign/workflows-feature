@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS workflow_steps (
   issue_id UUID NOT NULL,
   step_order INTEGER NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
-  PRIMARY KEY (workflow_id, issue_id)
+  UNIQUE (workflow_id, issue_id)
 );
 
 -- Indexes for performance

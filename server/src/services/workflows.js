@@ -63,26 +63,32 @@ export async function createWorkflow(companyId, data) {
  * Update a workflow
  */
 export async function updateWorkflow(id, data) {
-  let query = 'UPDATE workflows SET ';
-  const setClauses = [];
-  const params = [];
-  let paramIndex = 1;
-
-  if (data.name !== undefined) {
-    setClauses.push(`name = $${paramIndex++}`);
-    params.push(data.name);
+  if (data.name !== undefined && data.description !== undefined) {
+    const [workflow] = await sql`
+      UPDATE workflows
+      SET name = ${data.name}, description = ${data.description}, updated_at = NOW()
+      WHERE id = ${id}
+      RETURNING id, company_id as "companyId", name, description, created_at as "createdAt", updated_at as "updatedAt"
+    `;
+    return workflow;
+  } else if (data.name !== undefined) {
+    const [workflow] = await sql`
+      UPDATE workflows
+      SET name = ${data.name}, updated_at = NOW()
+      WHERE id = ${id}
+      RETURNING id, company_id as "companyId", name, description, created_at as "createdAt", updated_at as "updatedAt"
+    `;
+    return workflow;
+  } else if (data.description !== undefined) {
+    const [workflow] = await sql`
+      UPDATE workflows
+      SET description = ${data.description}, updated_at = NOW()
+      WHERE id = ${id}
+      RETURNING id, company_id as "companyId", name, description, created_at as "createdAt", updated_at as "updatedAt"
+    `;
+    return workflow;
   }
-  if (data.description !== undefined) {
-    setClauses.push(`description = $${paramIndex++}`);
-    params.push(data.description);
-  }
-  setClauses.push(`updated_at = NOW()`);
-  params.push(id);
-
-  query += setClauses.join(', ') + ` WHERE id = $${paramIndex} RETURNING id, company_id as "companyId", name, description, created_at as "createdAt", updated_at as "updatedAt"`;
-
-  const [workflow] = await sql.query(query, params);
-  return workflow;
+  return null;
 }
 
 /**
