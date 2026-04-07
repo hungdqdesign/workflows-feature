@@ -1,0 +1,8 @@
+{
+  "name": "@workflows/ui",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "echo 'ui dev'",
+    "build": "echo 'ui build'"
+  }
+}
